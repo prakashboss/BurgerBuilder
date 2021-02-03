@@ -26,9 +26,10 @@ class BurgerBuilder extends Component {
     },
     totalPrice: 4,
     purchasable: false,
+    purchasing: false
   };
 
-  updatePurchaseState(ingredients) {
+  updatePurchaseState = (ingredients) => {
     const sum = Object.keys(ingredients)
       .map((igKey) => {
         return ingredients[igKey];
@@ -78,6 +79,18 @@ class BurgerBuilder extends Component {
     this.updatePurchaseState(updatedIngredients);
   };
 
+  // to check if the order button was clicked
+  purchaseHandler = () => {
+    this.setState ({ purchasing: true})
+  }
+
+  purchaseCancelHandler = () => {
+    this.setState ({ purchasing: false})
+  }
+
+  purchaseContinueHandler = () => {
+    alert('you have Purchased the burger!!')
+  }
   render() {
     const disabledInfo = {
       ...this.state.ingredients,
@@ -90,8 +103,15 @@ class BurgerBuilder extends Component {
     
     return (
       <Aux>
-        <Modal>
-          <OrderSummary ingredients={this.state.ingredients}/>
+        <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+           
+          <OrderSummary 
+          ingredients={this.state.ingredients}
+            purchaseCancelled={this.purchaseCancelHandler}
+            purchaseContinued={this.purchaseContinueHandler}
+            price={this.state.totalPrice}
+          />
+          
         </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BurgerControls
@@ -100,6 +120,7 @@ class BurgerBuilder extends Component {
           disabled={disabledInfo}
           price={this.state.totalPrice}
           purchasable={this.state.purchasable}
+          ordered={this.purchaseHandler}
         />
       </Aux>
     );
