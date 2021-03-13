@@ -14,7 +14,7 @@ function burger(props) {
       return arr.concat(el);
     }, []);
 
-  console.log(transformedIngredients);
+  // console.log(props.ingredients);
   if (transformedIngredients.length === 0) {
     transformedIngredients = <p>Please start adding ingredients!!</p>;
   }
@@ -30,3 +30,4 @@ function burger(props) {
 }
 
 export default burger;
+
