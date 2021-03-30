@@ -122,13 +122,13 @@ class ContactData extends Component {
     for (let inputIdentifier in updatedOrderForm) {
       formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid
     }
-    console.log(updatedFormElement, inputIdentifier);
+    // console.log(updatedFormElement, inputIdentifier);
     this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
   };
-
+  
   orderHandler = (e) => {
     e.preventDefault();
-    console.log(this.props);
+    
     this.setState({ loading: true });
     const formData = {};
     for (let formElementIdentifier in this.state.orderForm) {
@@ -160,7 +160,7 @@ class ContactData extends Component {
         config: this.state.orderForm[Key],
       });
     }
-
+    console.log(this.props, "from contactData");
     let form = (
       <form onSubmit={this.orderHandler}>
         {formElementArray.map((formElement) => (
