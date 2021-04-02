@@ -11,7 +11,11 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 // import axios from "axios";
 // import * as actionType from "../../store/actions/actionTypes";
-import {addIngredient, removeIngredient} from "../../store/actions/index"
+import {
+  addIngredient,
+  removeIngredient,
+  intIngredients,
+} from "../../store/actions/index";
 
 class BurgerBuilder extends Component {
   // constructor (props) {
@@ -25,7 +29,6 @@ class BurgerBuilder extends Component {
     purchasing: false,
     // loading: false,
     // error: false
-
   };
 
   componentDidMount() {
@@ -39,6 +42,7 @@ class BurgerBuilder extends Component {
     //     this.setState({ error: true });
     //     console.log(error);
     //   });
+    this.props.onInitIngredients();
   }
 
   updatePurchaseState = (ingredients) => {
@@ -181,17 +185,17 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    tolPrice: state.totalPrice,
+    ings: state.burgerBuilder.ingredients,
+    tolPrice: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onIngredientAdded: (ingName) =>
-      dispatch(addIngredient(ingName)),
-    onIngredientRemoved: (ingName) =>
-      dispatch(removeIngredient(ingName)),
+    onIngredientAdded: (ingName) => dispatch(addIngredient(ingName)),
+    onIngredientRemoved: (ingName) => dispatch(removeIngredient(ingName)),
+    onInitIngredients: () => dispatch(intIngredients()),
   };
 };
 

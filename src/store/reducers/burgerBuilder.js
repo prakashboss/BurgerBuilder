@@ -1,14 +1,15 @@
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-  ingredients: null,
-  // {
-  //   bacon: 0,
-  //   salad: 0,
-  //   cheese: 0,
-  //   meat: 0,
-  // },
+  ingredients: 
+  {
+    bacon: 0,
+    salad: 0,
+    cheese: 0,
+    meat: 0,
+  },
   totalPrice: 4,
+  //since we are handling the error in action file the state must be in the reducer file
   error: false,
 };
 
@@ -38,6 +39,23 @@ const reducer = (state = initialState, action) => {
           [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
         },
         totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
+      };
+    case actionTypes.SET_INGREDIENTS:
+      return {
+        ...state,
+        ingredients: {
+          salad: action.ingredients.salad,
+          bacon: action.ingredients.bacon,
+          cheese: action.ingredients.cheese,
+          meat: action.ingredients.meat
+        },
+        
+        error: false,
+      };
+    case actionTypes.FETCH_INGREDIENTS_FAIL:
+      return {
+        ...state,
+        error: true,
       };
     default:
       return state;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
-import { connect } from 'react-redux'
+import { Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 import ContactData from "./ContactData/ContactData";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
@@ -41,35 +41,39 @@ class Checkout extends Component {
   };
 
   render() {
-    return (
-      <div>
-        <CheckoutSummary
-          ingredients={this.props.ings}
-          checkoutCancelled={this.checkoutCancelled}
-          checkoutContinued={this.checkoutContinued}
-        />
-        <Route
-          path={this.props.match.url + "/contact-data"}
-          // render={() => (
-          //   <ContactData
-          //     {...this.props}
-          //     totalPrice={this.props.tolPrice}
-          //     ingredients={this.props.ings}
-          //   />
-          // )}
-          component={ContactData}
-        />
-      </div>
-    );
+    let summary = <Redirect to="/" />;
+    if (this.props.ings) {
+      summary = (
+        <div>
+          <CheckoutSummary
+            ingredients={this.props.ings}
+            checkoutCancelled={this.checkoutCancelled}
+            checkoutContinued={this.checkoutContinued}
+          />
+          <Route
+            path={this.props.match.url + "/contact-data"}
+            // render={() => (
+            //   <ContactData
+            //     {...this.props}
+            //     totalPrice={this.props.tolPrice}
+            //     ingredients={this.props.ings}
+            //   />
+            // )}
+            component={ContactData}
+          />
+        </div>
+      );
+    }
+    return  summary;
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    tolPrice: state.tolPrice
-  }
-}
+    ings: state.burgerBuilder.ingredients,
+    tolPrice: state.burgerBuilder.tolPrice,
+  };
+};
 
 // const mapDispatchToProps = dispatch => {
 //   return {
@@ -77,4 +81,4 @@ const mapStateToProps = (state) => {
 //   }
 // }
 
-export default connect(mapStateToProps,undefined)(Checkout);
+export default connect(mapStateToProps, undefined)(Checkout);

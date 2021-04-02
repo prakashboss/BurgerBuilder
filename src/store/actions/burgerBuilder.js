@@ -15,14 +15,14 @@ export const removeIngredient = (ingName) => {
   };
 };
 
-const setIngredients = (ingredientS) => {
+export const setIngredients = (ingredientS) => {
   return {
     type: actionType.SET_INGREDIENTS,
     ingredients: ingredientS,
   };
 };
 
-const fetchIngredientsFail = () => {
+export const fetchIngredientsFail = () => {
   return {
     type: actionType.FETCH_INGREDIENTS_FAIL,
     error: true,
@@ -32,6 +32,7 @@ const fetchIngredientsFail = () => {
 export const intIngredients = () => {
   return (dispatch) => {
     // dispatch ()
+    
     Axios.get("ingredients.json")
       .then((response) => {
         // console.log(response.data);
@@ -39,7 +40,7 @@ export const intIngredients = () => {
       })
       .catch((error) => {
         // this.setState({ error: true });
-        dispatch(fetchIngredientsFail);
+        dispatch(fetchIngredientsFail());
         console.log(error);
       });
   };
