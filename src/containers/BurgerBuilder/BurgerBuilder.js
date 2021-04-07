@@ -15,6 +15,7 @@ import {
   addIngredient,
   removeIngredient,
   intIngredients,
+  purchaseInit
 } from "../../store/actions/index";
 
 class BurgerBuilder extends Component {
@@ -121,6 +122,7 @@ class BurgerBuilder extends Component {
       pathname: "/checkout",
       // search: "?" + queryString,
     });
+    this.props.onPurchaseInit()
   };
 
   render() {
@@ -196,6 +198,7 @@ const mapDispatchToProps = (dispatch) => {
     onIngredientAdded: (ingName) => dispatch(addIngredient(ingName)),
     onIngredientRemoved: (ingName) => dispatch(removeIngredient(ingName)),
     onInitIngredients: () => dispatch(intIngredients()),
+    onPurchaseInit: () => dispatch(purchaseInit()),
   };
 };
 
