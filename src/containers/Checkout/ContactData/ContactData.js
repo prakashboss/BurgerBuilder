@@ -82,7 +82,6 @@ class ContactData extends Component {
       },
     },
     formIsValid: false,
-    
   };
 
   checkValidity(value, rules) {
@@ -143,7 +142,7 @@ class ContactData extends Component {
       totalPrice: this.props.tolPrice,
       orderData: formData,
     };
-    this.props.onOrderBurger(order)
+    this.props.onOrderBurger(order, this.props.token);
     // Axios.post("/orders.json", order)
     //   .then((response) => {
     //     this.setState({ loading: false });
@@ -179,7 +178,11 @@ class ContactData extends Component {
           />
         ))}
 
-        <Button btnType="Success" clicked={this.orderHandler} disabled={!this.state.formIsValid}>
+        <Button
+          btnType="Success"
+          clicked={this.orderHandler}
+          disabled={!this.state.formIsValid}
+        >
           ORDER
         </Button>
       </form>
@@ -200,13 +203,15 @@ const mapStateToProps = (state) => {
   return {
     ings: state.burgerBuilder.ingredients,
     tolPrice: state.burgerBuilder.totalPrice,
-    loading: state.order.loading
+    loading: state.order.loading,
+    token: state.auth.token,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onOrderBurger: (orderData) => dispatch(purchaseBurger(orderData)),
+    onOrderBurger: (orderData, token) =>
+      dispatch(purchaseBurger(orderData, token)),
   };
 };
 

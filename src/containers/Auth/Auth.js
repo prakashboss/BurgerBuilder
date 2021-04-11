@@ -1,7 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
+import classes from "./Auth.css";
+import * as actions from "../../store/actions/index";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 class Auth extends Component {
   state = {
@@ -36,18 +40,78 @@ class Auth extends Component {
         touched: false,
       },
     },
+    isSignup: true,
+  };
+
+  checkValidity(value, rules) {
+    let isValid = true;
+    if (rules.required) {
+      isValid = value.trim() !== "" && isValid;
+    } else if (!rules.required) {
+      isValid = true;
+    }
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+
+    return isValid;
+  }
+
+  inputChagedHandler = (event, controlName) => {
+    const updatedControls = {
+      ...this.state.controls,
+      [controlName]: {
+        ...this.state.controls[controlName],
+        value: event.target.value,
+        valid: this.checkValidity(
+          event.target.value,
+          this.state.controls[controlName].validation
+        ),
+        touched: true,
+      },
+    };
+    console.log(
+      this.state.controls.email.value,
+      this.state.controls.password.value
+    );
+    this.setState({ controls: updatedControls });
+  };
+
+  submitHandler = (event) => {
+    event.preventDefault();
+    this.props.onAuth(
+      this.state.controls.email.value.toString(),
+      this.state.controls.password.value.toString(),
+      this.state.isSignup
+    );
+    console.log(
+      this.state.controls.email.value,
+      this.state.controls.password.value
+    );
+  };
+
+  switchAuthModeHandler = () => {
+    this.setState((preState) => {
+      return { isSignup: !preState.isSignup };
+    });
   };
 
   render() {
     const formElementsArray = [];
-    for (let Key in this.state.controls) {
+    for (let key in this.state.controls) {
+      // console.log(key);
       formElementsArray.push({
-        id: Key,
-        config: this.state.controls[Key],
+        id: key,
+        config: this.state.controls[key],
       });
     }
-  
-    const form = formElementsArray.map((formElement) => (
+    // console.log(formElementsArray);
+    let form = formElementsArray.map((formElement) => (
       <Input
         key={formElement.id}
         elementType={formElement.config.elementType}
@@ -59,15 +123,42 @@ class Auth extends Component {
         shouldValidate={formElement.config.validation.required}
       />
     ));
+
+    if (this.props.loading) {
+      form = <Spinner />;
+    }
+
+    let errorMessage = null;
+    if (this.props.error) {
+      errorMessage = <p>{this.props.error.message}</p>;
+    }
     return (
-      <div>
-        <form>
+      <div className={classes.Auth}>
+        {errorMessage}
+        <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType="Success">Submit </Button>
         </form>
+        <Button clicked={this.switchAuthModeHandler} btnType="Danger">
+          Switch to {this.state.isSignup ? "SIGNUP" : "SIGNIN"}
+        </Button>
       </div>
     );
   }
 }
 
-export default Auth;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAuth: (email, password, isSignup) =>
+      dispatch(actions.auth(email, password, isSignup)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
