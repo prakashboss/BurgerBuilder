@@ -8,17 +8,17 @@ import Aux from "../../../hoc/Auxi/auxi";
 const SideDrawer = (props) => {
   let attachedClass = [classes.SideDrawer, classes.Close];
   if (props.open) {
-    attachedClass = [classes.SideDrawer, classes.Open]
+    attachedClass = [classes.SideDrawer, classes.Open];
   }
   return (
     <Aux>
-      <Backdrop show={props.open} clicked={props.closed}/>
-      <div className={attachedClass.join(' ')}>
+      <Backdrop show={props.open} clicked={props.closed} />
+      <div className={attachedClass.join(" ")} onClick={props.closed}>
         <div className={classes.Logo}>
           <Logo />
         </div>
         <nav>
-          <NavigationItems isAuthenticated={props.auth}/>
+          <NavigationItems isAuthenticated={props.auth} />
         </nav>
       </div>
     </Aux>

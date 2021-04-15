@@ -7,7 +7,7 @@ import Axios from "../../../axios-orders";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
-import { purchaseBurger } from "../../../store/actions/index";
+import { purchaseBurger, intIngredients } from "../../../store/actions/index";
 
 class ContactData extends Component {
   state = {
@@ -141,8 +141,10 @@ class ContactData extends Component {
       ingredients: this.props.ings,
       totalPrice: this.props.tolPrice,
       orderData: formData,
+      userId: this.props.userId
     };
     this.props.onOrderBurger(order, this.props.token);
+    this.props.onBuilding()
     // Axios.post("/orders.json", order)
     //   .then((response) => {
     //     this.setState({ loading: false });
@@ -205,6 +207,8 @@ const mapStateToProps = (state) => {
     tolPrice: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
     token: state.auth.token,
+    userId: state.auth.userId
+    // building: state.burgerBuilder.token
   };
 };
 
@@ -212,6 +216,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onOrderBurger: (orderData, token) =>
       dispatch(purchaseBurger(orderData, token)),
+    onBuilding: () => dispatch(intIngredients())
   };
 };
 
