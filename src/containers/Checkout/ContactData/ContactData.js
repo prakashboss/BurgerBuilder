@@ -8,6 +8,7 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import { purchaseBurger, intIngredients } from "../../../store/actions/index";
+import { checkValidity } from "../../../Shared/utility";
 
 class ContactData extends Component {
   state = {
@@ -84,24 +85,24 @@ class ContactData extends Component {
     formIsValid: false,
   };
 
-  checkValidity(value, rules) {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    } else if (!rules.required) {
-      isValid = true;
-    }
+  // checkValidity(value, rules) {
+  //   let isValid = true;
+  //   if (rules.required) {
+  //     isValid = value.trim() !== "" && isValid;
+  //   } else if (!rules.required) {
+  //     isValid = true;
+  //   }
 
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
+  //   if (rules.minLength) {
+  //     isValid = value.length >= rules.minLength && isValid;
+  //   }
 
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
+  //   if (rules.maxLength) {
+  //     isValid = value.length <= rules.maxLength && isValid;
+  //   }
 
-    return isValid;
-  }
+  //   return isValid;
+  // }
 
   inputChagedHandler = (e, inputIdentifier) => {
     // console.log(e.target.value)
@@ -113,10 +114,22 @@ class ContactData extends Component {
     };
     updatedFormElement.touched = true;
     updatedFormElement.value = e.target.value;
-    updatedFormElement.valid = this.checkValidity(
+    updatedFormElement.valid = checkValidity(
       updatedFormElement.value,
       updatedFormElement.validation
     );
+    // const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+    //   touched: true,
+    //   value: e.target.value,
+    //   value: this.checkValidity(
+    //     e.target.value,
+    //     this.state.orderForm.validation
+    //   ),
+    // });
+    
+    // const updatedOrderForm = updateObject(this.state.orderForm, {
+    //   [inputIdentifier]: updatedFormElement
+    // })
     updatedOrderForm[inputIdentifier] = updatedFormElement;
 
     let formIsValid = true;
@@ -141,10 +154,10 @@ class ContactData extends Component {
       ingredients: this.props.ings,
       totalPrice: this.props.tolPrice,
       orderData: formData,
-      userId: this.props.userId
+      userId: this.props.userId,
     };
     this.props.onOrderBurger(order, this.props.token);
-    this.props.onBuilding()
+    this.props.onBuilding();
     // Axios.post("/orders.json", order)
     //   .then((response) => {
     //     this.setState({ loading: false });
@@ -207,7 +220,7 @@ const mapStateToProps = (state) => {
     tolPrice: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
     token: state.auth.token,
-    userId: state.auth.userId
+    userId: state.auth.userId,
     // building: state.burgerBuilder.token
   };
 };
@@ -216,7 +229,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onOrderBurger: (orderData, token) =>
       dispatch(purchaseBurger(orderData, token)),
-    onBuilding: () => dispatch(intIngredients())
+    onBuilding: () => dispatch(intIngredients()),
   };
 };
 

@@ -7,6 +7,7 @@ import Button from "../../components/UI/Button/Button";
 import classes from "./Auth.css";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import { checkValidity } from '../../Shared/utility'
 
 class Auth extends Component {
   state = {
@@ -49,24 +50,24 @@ class Auth extends Component {
       this.props.onSetAuthRedirectPath();
     }
   }
-  checkValidity(value, rules) {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    } else if (!rules.required) {
-      isValid = true;
-    }
+  // checkValidity(value, rules) {
+  //   let isValid = true;
+  //   if (rules.required) {
+  //     isValid = value.trim() !== "" && isValid;
+  //   } else if (!rules.required) {
+  //     isValid = true;
+  //   }
 
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
+  //   if (rules.minLength) {
+  //     isValid = value.length >= rules.minLength && isValid;
+  //   }
 
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
+  //   if (rules.maxLength) {
+  //     isValid = value.length <= rules.maxLength && isValid;
+  //   }
 
-    return isValid;
-  }
+  //   return isValid;
+  // }
 
   inputChagedHandler = (event, controlName) => {
     const updatedControls = {
@@ -74,7 +75,7 @@ class Auth extends Component {
       [controlName]: {
         ...this.state.controls[controlName],
         value: event.target.value,
-        valid: this.checkValidity(
+        valid: checkValidity(
           event.target.value,
           this.state.controls[controlName].validation
         ),
